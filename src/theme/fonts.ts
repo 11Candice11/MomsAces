@@ -1,3 +1,5 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 // Deep imports so Metro bundles only the three font files we use (not every weight).
 import { Nunito_600SemiBold } from '@expo-google-fonts/nunito/600SemiBold';
 import { Nunito_700Bold } from '@expo-google-fonts/nunito/700Bold';
@@ -8,4 +10,6 @@ export const fontAssets = {
   PlayfairDisplay_700Bold,
   Nunito_600SemiBold,
   Nunito_700Bold,
+  // The icon font, loaded up front so icons never appear blank.
+  ...MaterialCommunityIcons.font,
 };

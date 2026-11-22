@@ -27,6 +27,7 @@ export const en = {
     start: 'Start',
     later: 'Later',
     playCard: 'Play card',
+    comingSoon: 'Coming soon',
     tryAgain: "Let's try that again.",
     ticketsLabel: (n: number) => (n === 1 ? '1 Ticket' : `${n} Tickets`),
     starsLabel: (n: number) => (n === 1 ? '1 Star' : `${n} Stars`),
