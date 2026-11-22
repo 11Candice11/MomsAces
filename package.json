@@ -8,10 +8,11 @@
     "android": "expo run:android",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No Jest yet (task 1.3)\"",
+    "test": "jest",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "nosync": "sh scripts/nosync.sh"
+    "nosync": "sh scripts/nosync.sh",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "expo": "56.0.24",
@@ -21,11 +22,14 @@
     "react-native": "0.85.3"
   },
   "devDependencies": {
+    "@types/jest": "30.0.0",
     "@types/react": "19.2.2",
     "eslint": "9.39.5",
     "eslint-config-expo": "56.0.4",
     "eslint-config-prettier": "10.1.8",
+    "jest": "30.5.2",
     "prettier": "3.10.1",
+    "ts-jest": "29.4.15",
     "typescript": "6.0.3"
   }
 }
