@@ -7,3 +7,5 @@ export { ThemeProvider, useTheme } from './ThemeProvider';
 export { touch } from './touch';
 export { fontSizes, fonts, textScales, type FontSizeName, type TextScaleName } from './typography';
 export { useAppFonts } from './useAppFonts';
+export { scaleMotion, type Motion } from './motionScale';
+export { useMotion } from './useMotion';
