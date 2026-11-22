@@ -16,6 +16,8 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
-    }
+    },
+    "backgroundColor": "#2A1238",
+    "plugins": []
   }
 }
