@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { APP_NAME } from '@/appInfo';
+import { strings } from '@/strings';
 import { ThemeProvider, useAppFonts, useTheme } from '@/theme';
 
 // Keep the splash screen up until the bundled fonts are ready, so text never flashes in a fallback font.
@@ -14,8 +14,8 @@ function ThemePreview() {
   const theme = useTheme();
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.velvet }]}>
-      <Text style={theme.text.hero}>{APP_NAME}</Text>
-      <Text style={theme.text.body}>Every day, a winning hand.</Text>
+      <Text style={theme.text.hero}>{strings.common.appName}</Text>
+      <Text style={theme.text.body}>{strings.common.tagline}</Text>
     </View>
   );
 }
