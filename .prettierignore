@@ -1,0 +1,11 @@
+node_modules
+node_modules.nosync
+android
+ios
+dist
+coverage
+.expo
+package-lock.json
+.kiro
+docs
+assets
