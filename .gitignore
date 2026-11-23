@@ -10,6 +10,11 @@ expo-env.d.ts
 .kotlin/
 *.orig.*
 *.jks
+# release signing (keystore lives in ~/Keys/momsaces/, passwords in ~/.gradle/gradle.properties; see docs/release-signing.md)
+*.keystore
+keystore.properties
+signing.properties
+release-signing.properties
 *.p8
 *.p12
 *.key

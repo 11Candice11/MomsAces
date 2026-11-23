@@ -66,6 +66,7 @@ Requirements use EARS syntax. "The app" is Mom's Aces. "She" is the user. "Ace" 
 19. THE app SHALL process each notification response the platform delivers, in order of response time, exactly once.
 20. THE reminders SHALL be delivered at their scheduled times, and the Done and Later actions SHALL work, in each of these cases: the app is open; the app is in the background; the app has been swiped away from recent apps; the phone has been restarted. THIS SHALL be verified on a real Samsung phone. (A user-initiated "Force stop" in Android settings cancels all of an app's alarms until she next opens it; no app can prevent this, so it is excluded.)
 21. WHEN her name or any reminder setting changes, THE app SHALL reschedule the notifications so the text uses the current name.
+22. THE app SHALL show every clock time (due times, reminder times in Settings, notification text) in the 12-hour or 24-hour format set on her phone, read from the device through `expo-localization`. Stored times SHALL stay `HH:mm`. THE formatting SHALL be done by one pure, unit-tested function `formatTime(time, '12h' | '24h')`.
 
 ## R3 Earning Ace Tickets
 
@@ -232,7 +233,7 @@ Requirements use EARS syntax. "The app" is Mom's Aces. "She" is the user. "Ace" 
 9. WHEN a new week begins, THE "days this week" display SHALL reset silently, with no message about the previous week.
 10. THE rank, level, path and days-this-week logic SHALL be pure, deterministic and unit-tested in `src/domain/progression`.
 11. WHILE a mystery card for a chest node or rank node is waiting, THE node SHALL show "Chest ready to open" and, when she taps it, THE app SHALL open the mystery reveal. Otherwise a chest node SHALL look like a normal node labelled "Mystery card", with no padlock, no amounts and no hint of a missing or lost reward.
-12. WHEN she reaches a NEW RANK (Queen, King or Ace, not each level), THE app SHALL also add 1 mystery card to her pending rewards, in addition to the chest at that step. THE amount SHALL be defined in `economy.ts`, and each new rank SHALL grant it only once.
+12. WHEN she reaches a NEW RANK (Queen, King or Ace, not each level), THE app SHALL also add 1 mystery card to her pending rewards, in addition to the chest at that step. THE amount SHALL be defined in `economy.ts`, and each new rank SHALL grant it only once. Path steps 100, 200 and 300 (reaching Queen, King and Ace) each have a milestone chest, so at each of those steps she SHALL receive TWO mystery cards: the chest card and the new-rank card.
 
 ## R16 Royal Flush bonus
 
@@ -295,13 +296,13 @@ iOS builds, backup export/import, additional mini-games (shown locked only), clo
 - One play per task per day. A repeat tap never repeats the card's reward. Tapping a played card on Home gives only an Ace message. "Done" on a Water notification for a played card gives +1 star, up to 3 per day; any other repeat gives an Ace message (R1.16, R3.7).
 - Economy (all in `economy.ts`): per task card 1 ticket + 5 stars + 1 path step; Solitaire win 15 stars (also for "Finish for me"); Royal Flush 2 tickets + 20 stars + 2 path steps + 1 mystery card; a mystery reveal gives exactly one prize; the cheapest collection item costs 50 stars.
 - Collection: 9 purchasable items at first, 3 per theme (red, purple, gold): a card back at 50 stars, a table colour at 100 stars, a card back at 200 stars. Prices are in `economy.ts`.
-- Mystery cards come only from the Royal Flush chest, Path milestone chests (one every 10 path steps) and reaching a new rank (Queen, King or Ace: 1 card each, on top of the chest at that step). The Royal Flush chest shows "?". Path chest nodes are labelled "Mystery card" with no amounts.
+- Mystery cards come only from the Royal Flush chest, Path milestone chests (one every 10 path steps) and reaching a new rank (Queen, King or Ace: 1 card each, on top of the chest at that step, so steps 100, 200 and 300 each give two mystery cards). The Royal Flush chest shows "?". Path chest nodes are labelled "Mystery card" with no amounts.
 - Rank and path numbers: 5 levels per rank, 20 steps per level, a milestone chest every 10 steps.
 - Prize weights: 1 ticket (40), 2 tickets (20), 10 stars (20), 25 stars (8), each unowned item (2). The fallback prize is 10 stars.
 - A Solitaire win gives 15 stars (the mockup's +25 is wrong). Decorations never overlap the Royal Flush title. There is no large-text Move mockup; R12.9 applies.
 - Solitaire new games come from about 300 verified winnable seeds, with a random seed only as a fallback. A "Finish for me" button appears when only moves to the foundations remain.
 - Home shows one big featured card (the NEXT card) with a row of 4 small cards beneath it (gold tick when played, clock and due time when pending). Tapping the featured card = "Play card"; tapping another pending small card asks "Play the <name> card now?" with "Yes" and "Not yet". Not-yet-due cards show a clock and due time, never a padlock. Before her first reminder, Ace sleeps but the next card is still shown. Both views come from the same hand state.
-- Button labels: "Play card" and "Help" everywhere (the guide screen's title stays "Where am I?"). "Later" stays on Home. "Due now" is gold, never green. Times are shown in 12-hour form with AM/PM.
+- Button labels: "Play card" and "Help" everywhere (the guide screen's title stays "Where am I?"). "Later" stays on Home. "Due now" is gold, never green. Times follow the phone's 12-hour or 24-hour setting (R2.22).
 - Stretch and Stand complete only through their guided flows. Their notifications use "Start" and "Later"; Water and Bathroom use "Done" and "Later". Both actions open Home. Tapping the notification body opens Home.
 - Force stop is out of scope for reminders (R2.20). Battery guidance covers Samsung "Sleeping apps", "Deep sleeping apps" and "Put unused apps to sleep".
 - Stand With Help step 1 has a big "My helper is here" button (to step 2) as well as "Call for help", which only opens the dialer. The countdown starts when the helper taps "Start". The countdown range is 15 to 60 seconds (default 30), to be confirmed by her physio.
@@ -313,8 +314,8 @@ iOS builds, backup export/import, additional mini-games (shown locked only), clo
 - `settings.displayName`, default "Mom" (R10.5, R14.8).
 - Visual references (Stitch screenshots of Home, Move, Path, task-complete and Royal Flush) live in `.kiro/docs/designs/`. They show layout and style only. Where a mockup's wording or behaviour differs from this spec, the spec wins.
 - Application id `com.candice.momspace`. `android:allowBackup="false"`. ts-jest. `react-native-svg`.
-- Pinned versions: Expo SDK 56.0.24 with react-native-mmkv 4.3.2 and react-native-nitro-modules 0.35.9 (full list in `.kiro/steering/tech.md`). If MMKV v4 or Nitro causes a problem, stop and report, and propose AsyncStorage behind the same storage adapter instead of working around it.
-- Updates: offline builds installed over the existing app. No OTA updates. Every build uses the same application id and signing key so her data is kept.
+- Pinned versions: Expo SDK 57.0.33 (React Native 0.86.3) with react-native-mmkv 4.3.2 and react-native-nitro-modules 0.35.9 (full list in `.kiro/steering/tech.md`). If MMKV v4 or Nitro causes a problem, stop and report, and propose AsyncStorage behind the same storage adapter instead of working around it.
+- Updates: offline builds installed over the existing app. No OTA updates. Every build uses the same application id and signing key so her data is kept. The release keystore lives outside the repository in `~/Keys/momsaces/`, and signing is described in `docs/release-signing.md` (task 6.7a).
 - Exercises: the owner will supply the real list later. The app ships with placeholder entries.
 
 ## Open questions

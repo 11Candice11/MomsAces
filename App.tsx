@@ -1,10 +1,11 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { StorageGateBanner } from '@/debug/StorageGateBanner';
 
 import { RootNavigator } from '@/navigation';
-import { ThemeProvider, useAppFonts } from '@/theme';
+import { colors, ThemeProvider, useAppFonts } from '@/theme';
 
 // Keep the splash screen up until the bundled fonts are ready, so text never flashes in a fallback font.
 void SplashScreen.preventAutoHideAsync();
@@ -26,6 +27,12 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
+        {/* TEMPORARY task 1.9 gate, debug builds only. Remove in task 2.1. */}
+        {__DEV__ ? (
+          <SafeAreaView edges={['top']} style={{ backgroundColor: colors.gold }}>
+            <StorageGateBanner />
+          </SafeAreaView>
+        ) : null}
         <RootNavigator />
         <StatusBar style="light" />
       </ThemeProvider>

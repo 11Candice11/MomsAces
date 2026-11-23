@@ -32,6 +32,11 @@
       ]
     },
     "backgroundColor": "#2A1238",
-    "plugins": ["./plugins/withDebugOnlyInternet"]
+    "plugins": [
+      "./plugins/withDebugOnlyInternet",
+      "expo-font",
+      "expo-splash-screen",
+      "expo-status-bar"
+    ]
   }
 }

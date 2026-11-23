@@ -54,8 +54,8 @@ Celebrations and the mascot are used only through `components/celebrations` and 
 
 ## 2. Tooling
 
-- Expo SDK **56.0.24** with React Native 0.85.3, `expo-dev-client`, and `react-native-mmkv` **4.3.2** with `react-native-nitro-modules` **0.35.9**. All versions are pinned exactly (no `^` or `~`), and the full list is in `.kiro/steering/tech.md`. `react-native-mmkv` and `lottie-react-native` need a development build, so Expo Go is not used.
-- Why these versions: Expo SDK 56 ships React Native 0.85.3, which is the version `react-native-mmkv` 4.3.2 is developed against, and 0.35.9 is the Nitro version its generated code was built with. Newer SDKs (57, 58) exist but were not checked against MMKV, so upgrading is a deliberate later task.
+- Expo SDK **57.0.33** with React Native 0.86.3, `expo-dev-client`, and `react-native-mmkv` **4.3.2** with `react-native-nitro-modules` **0.35.9**. All versions are pinned exactly (no `^` or `~`), and the full list is in `.kiro/steering/tech.md`. `react-native-mmkv` and `lottie-react-native` need a development build, so Expo Go is not used.
+- Why these versions: Expo SDK 56.0.24 failed the `expo-doctor` Hermes V1 check (a memory regression for apps using Reanimated or Worklets), fixed from Expo SDK 57.0.9 / React Native 0.86.2. SDK 57 is used, not 58. `react-native-mmkv` 4.3.2 stays with `react-native-nitro-modules` 0.35.9, the Nitro version its generated code was built with. MMKV 4.3.2 was developed against React Native 0.85, so task 1.9 verifies it on her phone with a temporary banner before anything is built on top.
 - **Gate:** task 1.9 must pass `npx expo-doctor` and start a development build on a device or emulator before anything else is built on top. If MMKV v4 or Nitro causes any problem, work stops and the problem is reported with a proposed fallback (section 5), never worked around silently.
 - `expo-updates` is not installed: there are no over-the-air updates (section 24).
 - Install with `npx expo install` so Expo-managed packages match the SDK. `.npmrc` sets `save-exact=true`, `package-lock.json` is committed, and `npx expo install --check` and `npx expo-doctor` must pass.
@@ -200,7 +200,7 @@ export const zustandStorage: StateStorage = {
   removeItem: (k) => { mmkv.remove(k); },
 };
 ```
-- **Fallback if MMKV v4 or Nitro fails** (build error, crash, or incompatibility found in task 1.9): replace the body of this adapter with `@react-native-async-storage/async-storage` (the Expo SDK 56 version), which Zustand `persist` supports through the same `StateStorage` shape (its async methods are accepted). Nothing outside `services/storage.ts` changes, which is why stores only ever see the adapter. The decision is made with the owner, not silently.
+- **Fallback if MMKV v4 or Nitro fails** (build error, crash, or incompatibility found in task 1.9): replace the body of this adapter with `@react-native-async-storage/async-storage` (the version Expo SDK 57 expects), which Zustand `persist` supports through the same `StateStorage` shape (its async methods are accepted). Nothing outside `services/storage.ts` changes, which is why stores only ever see the adapter. The decision is made with the owner, not silently.
 - MMKV v4 replaced `new MMKV()` with `createMMKV()` and `delete()` with `remove()`; older examples online use the v3 API. It needs `react-native-nitro-modules` and the New Architecture, which Expo SDK 56 uses by default.
 - `persist(..., { name, version, storage: createJSONStorage(() => zustandStorage), migrate, partialize })`.
 - Extension point for backup (R10.5): `services/backup.ts` exports `exportBackup()` and `importBackup(json)` as documented stubs that throw "not implemented", not wired to the UI, plus a `BACKUP_STORE_KEYS` list of every persisted key.
@@ -265,7 +265,7 @@ All functions are pure; the date and numbers are arguments.
 - `rankFromPosition(position) -> { rank, level, progressInLevel }`. Rank order jack, queen, king, ace. Ace level keeps increasing beyond the configured top level.
 - `didRankUp(before, after) -> { rankUp: boolean, levelUp: boolean, newRank }` drives the rank-up celebration.
 - `milestonesCrossed(before, after, alreadyClaimed) -> number[]` returns new milestone steps, each creating one `PendingMystery`.
-- `newRanksReached(before, after, alreadyClaimed) -> PlayerRank[]` returns each of queen, king and ace newly reached (not each level) and not yet in `claimedRankUps`. Each creates `ECONOMY.newRank.mysteryCards` `PendingMystery` (source `rankUp`, `milestoneStep` = the rank's step). At steps 100, 200 and 300 the player therefore gets the milestone chest card AND the new-rank card.
+- `newRanksReached(before, after, alreadyClaimed) -> PlayerRank[]` returns each of queen, king and ace newly reached (not each level) and not yet in `claimedRankUps`. Steps 100, 200 and 300 are also milestone chests, so reaching each of them creates two pending mystery cards: one from `milestonesCrossed` (source `chest`) and one from `newRanksReached` (source `rankUp`). Each new rank creates `ECONOMY.newRank.mysteryCards` `PendingMystery` (source `rankUp`, `milestoneStep` = the rank's step). At steps 100, 200 and 300 the player therefore gets the milestone chest card AND the new-rank card.
 - `isRoyalFlushEligible({ playedToday: TaskId[], claimedOn, today }) -> boolean`: all 4 tasks played today and `claimedOn !== today`.
 - `domain/progression/week.ts`: `litDays(days, weekId)` from days with at least one completed task this week; `daysThisWeek(state) -> number` (the "N" in "N days this week"); `rollWeek(state, today)` resets silently when a new week starts. `weekId` uses Monday-start weeks. Functions never return negative values. The interface never uses the word "streak".
 - **Path nodes.** `pathNodes(position, aheadSteps) -> PathNode[]` builds the whole board, not only the rank cards:
@@ -388,7 +388,7 @@ Matches the Home mockup (`.kiro/docs/designs/home.png`) except for the differenc
 - Ace's pose and line follow section 6: sleeping before her first reminder (the NEXT card is still shown with its clock), waving once all 4 cards are played, awake otherwise.
 - When `homeFocus` is set (she came from a notification), that card is the featured card and Ace invites her to play it.
 - If a mystery card is pending, the celebration queue shows it once after Home gains focus. It stays pending until revealed.
-- Time display: every time shown to her uses one `formatTime` helper in 12-hour form with AM/PM; stored times stay `HH:mm`.
+- Time display (R2.22): every time shown to her uses the pure `formatTime(time, clock)` in `domain/shared/formatTime.ts`, where `clock` is `'12h'` ("9:00 AM") or `'24h'` ("09:00"). The UI gets `clock` from `useDeviceClock()` in `services/clock.ts`, which reads `getCalendars()[0].uses24hourClock` from `expo-localization` (falling back to `'12h'` if unknown) and re-reads it when the app returns to the foreground. Notification text uses the same function when reminders are synced. Stored times stay `HH:mm`.
 
 ## 13. Notifications (`services/notifications.ts`)
 
@@ -519,13 +519,15 @@ Per `testing.md`: Jest + ts-jest for `src/domain/**` only, coverage 90%, includi
 
 No INTERNET permission in the release manifest (blocked in release only, since dev builds need it for Metro). No analytics or crash SDKs. `allowBackup=false`. No purchases, ads or gambling mechanics: all prizes are free and a reveal always yields a prize.
 
-## 24. Updates and signing (task 15.7)
+## 24. Updates and signing (tasks 6.7a, 6.8, 15.7)
 
 - There are no over-the-air updates (`expo-updates` is not installed). A new version is built offline on the owner's computer and installed over the existing app on her phone (for example a release APK installed over the old one, or `adb install -r`).
 - Android keeps an app's data on an update only if the new build has the **same application id (`com.candice.momspace`) and the same signing key**. So every build that goes onto her phone, including test builds, is signed with one release keystore created at the start. The keystore and its password are backed up somewhere safe outside the repository; losing it means the phone must uninstall the app and she loses her data.
 - `android:allowBackup="false"` means a fresh install starts empty, which is why preserving data depends on updates over the top of the old app.
 - The version code increases with every build.
-- A short written procedure (build, install, check the data survived) goes in `docs/` in task 15.7.
+- **Signing setup** (task 6.7a, `docs/release-signing.md`): the keystore is created with `keytool` in `~/Keys/momsaces/`, outside the repository. The store path, store password, key alias and key password are Gradle properties (`MOMSACES_RELEASE_STORE_FILE`, `MOMSACES_RELEASE_STORE_PASSWORD`, `MOMSACES_RELEASE_KEY_ALIAS`, `MOMSACES_RELEASE_KEY_PASSWORD`) read from `~/.gradle/gradle.properties` or `ORG_GRADLE_PROJECT_*` environment variables. `android/` is generated by prebuild and git-ignored, so the release `signingConfig` is added by a config plugin (`plugins/withReleaseSigning.js`), never by editing `android/` by hand; `prebuild --clean` keeps signing. `*.keystore`, `*.jks` and signing property files are git-ignored.
+- **Release install** (task 6.8): bump `versionCode`, `prebuild --clean`, `assembleRelease`, `apksigner verify --print-certs` against the recorded fingerprint, `adb install -r`.
+- A short written update procedure (build, install, check the data survived) goes in `docs/` in task 15.7.
 
 ## 25. Mockup reconciliation (visual references)
 
@@ -537,7 +539,7 @@ Eight mockups are in `.kiro/docs/designs/` (`home`, `move_hub`, `path`, `play`, 
 | Home, all screens | Buttons "Help" and "Play card" | **Adopted**: "Help" and "Play card" everywhere. The guide screen's title stays "Where am I?". |
 | Home | No "Later" button | Spec wins: "Later" stays. |
 | Home | Green dot on "Due now" | Gold. Green is only for "Done" checks. |
-| Home | Times "10:30 AM" | Adopted: 12-hour display through `formatTime`. |
+| Home | Times "10:30 AM" | Times follow the phone's 12/24-hour setting through `formatTime` (R2.22). |
 | Home | Sample data (Water featured and also played; Stretch 1:00 PM) | Sample only. Real data from `handState` and settings; a played card is never "Due now". |
 | Home | "Royal Flush" chip with a gift icon | Closed chest showing only "?". |
 | Path | Chest amounts ("+1 Ticket, 50 Stars", "+250 Stars"), King reward "+3 Tickets and Card Back" | Placeholders only. Chest nodes say "Mystery card" with no amounts. A new rank adds 1 mystery card (`ECONOMY.newRank`). |
