@@ -35,7 +35,14 @@
     "plugins": [
       "./plugins/withDebugOnlyInternet",
       "expo-font",
-      "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 220,
+          "backgroundColor": "#2A1238"
+        }
+      ],
       "expo-status-bar"
     ]
   }

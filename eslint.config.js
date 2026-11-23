@@ -1,6 +1,7 @@
 const { defineConfig, globalIgnores } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
 const prettierConfig = require('eslint-config-prettier/flat');
+const globals = require('globals');
 
 module.exports = defineConfig([
   globalIgnores([
@@ -14,6 +15,11 @@ module.exports = defineConfig([
   ]),
   expoConfig,
   prettierConfig,
+  {
+    // Dev scripts and config plugins run in Node, not in the app.
+    files: ['scripts/**/*.js', 'plugins/**/*.js'],
+    languageOptions: { globals: globals.node },
+  },
   {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
