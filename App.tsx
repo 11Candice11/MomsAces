@@ -1,38 +1,31 @@
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { StorageGateBanner } from '@/debug/StorageGateBanner';
-
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RootNavigator } from '@/navigation';
-import { colors, ThemeProvider, useAppFonts } from '@/theme';
+import { useSettingsStore, useStoresHydrated } from '@/store';
+import { ThemeProvider, useAppFonts } from '@/theme';
 
-// Keep the splash screen up until the bundled fonts are ready, so text never flashes in a fallback font.
+// Keep the splash screen up until fonts and saved data are ready, so nothing flashes.
 void SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [fontsLoaded, fontError] = useAppFonts();
+  const hydrated = useStoresHydrated();
+  const textScale = useSettingsStore((s) => s.textScale);
+  const calmMode = useSettingsStore((s) => s.calmMode);
+  // If the fonts fail to load, carry on with the system font rather than showing nothing.
+  const ready = (fontsLoaded || fontError !== null) && hydrated;
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
-      void SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
+    if (ready) void SplashScreen.hideAsync();
+  }, [ready]);
 
-  // If the fonts fail to load, carry on with the system font rather than showing nothing.
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
+  if (!ready) return null;
 
   return (
     <SafeAreaProvider>
-      <ThemeProvider>
-        {/* TEMPORARY task 1.9 gate, debug builds only. Remove in task 2.1. */}
-        {__DEV__ ? (
-          <SafeAreaView edges={['top']} style={{ backgroundColor: colors.gold }}>
-            <StorageGateBanner />
-          </SafeAreaView>
-        ) : null}
+      <ThemeProvider textScale={textScale} calmMode={calmMode}>
         <RootNavigator />
         <StatusBar style="light" />
       </ThemeProvider>
