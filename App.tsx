@@ -2,6 +2,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { CelebrationHost } from '@/components/celebrations';
 import { RootNavigator } from '@/navigation';
 import { useSettingsStore, useStoresHydrated } from '@/store';
 import { ThemeProvider, useAppFonts } from '@/theme';
@@ -27,6 +28,7 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider textScale={textScale} calmMode={calmMode}>
         <RootNavigator />
+        <CelebrationHost />
         <StatusBar style="light" />
       </ThemeProvider>
     </SafeAreaProvider>

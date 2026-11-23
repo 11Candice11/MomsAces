@@ -10,3 +10,13 @@ export type {
   SolitaireData,
   SolitaireSave,
 } from './sanitize';
+export { celebrate, dismissCelebration, useCelebrationStore } from './celebrationStore';
+export type { CelebrationEvent, MascotPose, QueuedCelebration } from './celebrationQueue';
+export {
+  registerRewardTarget,
+  useRewardTargets,
+  type RewardTarget,
+  type ScreenRect,
+} from './rewardTargets';
+export { useSessionStore } from './sessionStore';
+export * as gameActions from './gameActions';

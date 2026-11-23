@@ -23,6 +23,8 @@ export const colors = {
   disabled: '#B9AFC0',
   surface: '#FFFFFF',
   shadow: '#00000033',
+  /** Celebration backdrop: velvet at 97%, calm behind the text; the counters stay just visible. */
+  backdrop: '#2A1238F7',
 } as const;
 
 export type ColorName = keyof typeof colors;

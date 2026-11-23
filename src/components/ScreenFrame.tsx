@@ -63,9 +63,13 @@ export function ScreenFrame({
             onPress={() => navigation.goBack()}
           />
         ) : null}
-        <Text accessibilityRole="header" style={[theme.text.title, styles.title]}>
-          {title}
-        </Text>
+        {showBack ? (
+          <View style={styles.title} />
+        ) : (
+          <Text accessibilityRole="header" style={[theme.text.title, styles.title]}>
+            {title}
+          </Text>
+        )}
         {showSettings ? (
           <IconButton
             icon="cog-outline"
@@ -76,6 +80,18 @@ export function ScreenFrame({
         {showHelp ? <HelpButton /> : null}
       </View>
 
+      {showBack ? (
+        // Stack screens: the title gets the full width under the buttons, so it never breaks mid-word.
+        <Text
+          accessibilityRole="header"
+          style={[
+            theme.text.title,
+            { paddingHorizontal: theme.spacing.md, paddingTop: theme.spacing.sm },
+          ]}
+        >
+          {title}
+        </Text>
+      ) : null}
       <View style={[styles.content, { padding: theme.spacing.md }]}>{children}</View>
 
       {primaryAction ? (

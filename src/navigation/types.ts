@@ -20,6 +20,8 @@ export type RootStackParamList = {
   BatteryGuide: undefined;
   /** The 3-step guide titled "Where am I?", opened by the Help button. Shown as a modal. */
   Guide: undefined;
+  /** Development builds only: previews every celebration (task 4.6). */
+  CelebrationGallery: undefined;
 };
 
 declare global {

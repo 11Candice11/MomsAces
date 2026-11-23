@@ -9,3 +9,4 @@ export { fontSizes, fonts, textScales, type FontSizeName, type TextScaleName } f
 export { useAppFonts } from './useAppFonts';
 export { scaleMotion, type Motion } from './motionScale';
 export { useMotion } from './useMotion';
+export { MotionOverride, useMotionOverride } from './MotionOverride';

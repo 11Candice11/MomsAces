@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { BatteryGuideScreen } from '@/screens/BatteryGuideScreen';
+import { CelebrationGalleryScreen } from '@/screens/CelebrationGalleryScreen';
 import { ExerciseSessionScreen } from '@/screens/ExerciseSessionScreen';
 import { GuideScreen } from '@/screens/GuideScreen';
 import { PathScreen } from '@/screens/PathScreen';
@@ -35,6 +36,9 @@ export function RootNavigator() {
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="BatteryGuide" component={BatteryGuideScreen} />
         <Stack.Screen name="Guide" component={GuideScreen} options={{ presentation: 'modal' }} />
+        {__DEV__ ? (
+          <Stack.Screen name="CelebrationGallery" component={CelebrationGalleryScreen} />
+        ) : null}
       </Stack.Navigator>
     </NavigationContainer>
   );

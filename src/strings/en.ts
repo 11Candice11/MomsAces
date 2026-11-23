@@ -78,6 +78,7 @@ export const en = {
 
   /** Ace's speech. Each context has a pool of lines; one is picked per day (task 4.2). */
   mascot: {
+    name: 'Ace',
     nextWater: [
       (name) => `Time for a sip of water, ${name}!`,
       (name) => `A little water would be lovely, ${name}.`,
@@ -299,6 +300,29 @@ export const en = {
     youWon: 'You won!',
     rankUpTitle: 'You moved up!',
     sessionComplete: 'Session complete',
+    aceCardTitle: (task: string) => `${task} Ace`,
+    aceCardLabel: (task: string) => `Your ${task} card turned into a golden Ace.`,
+    chestHidden: 'A closed chest. Open it to see your surprise.',
+    mysteryHidden: 'A mystery card, face down.',
+    revealComingSoon: 'Your mystery card is saved. You can open it soon.',
+    newRankLevel: (rank: string, level: number) => `${rank} ${level}`,
+    winStarsRise: (n: number) => `+${n === 1 ? '1 Star' : `${n} Stars`}`,
+  },
+  debug: {
+    galleryTitle: 'Celebrations',
+    openGallery: 'Celebration gallery (debug)',
+    levelFull: 'Full',
+    levelCalm: 'Calm',
+    levelNone: 'None',
+    taskComplete: 'Task complete',
+    sessionComplete: 'Session complete',
+    rankUp: 'Rank up',
+    levelUp: 'Level up',
+    royalFlush: 'Royal Flush',
+    mysteryReveal: 'Mystery reveal',
+    win: 'Win',
+    aceMessage: 'Ace message',
+    aceMessageStar: 'Ace message with star',
   },
 
   settings: {
