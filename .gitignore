@@ -37,3 +37,5 @@ yarn-error.*
 /android
 # coverage
 /coverage
+# IDE
+.idea/
