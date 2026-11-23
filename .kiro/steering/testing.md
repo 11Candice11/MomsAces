@@ -5,7 +5,7 @@ inclusion: always
 # Testing
 
 ## Scope
-Jest tests are REQUIRED for every module in `src/domain`. UI is not unit-tested in this project (manual device checks instead).
+Jest tests are REQUIRED for every module in `src/domain`. The stores are also tested, with an in-memory MMKV stand-in (`src/test/mmkvMock.ts`, mapped in `jest.config.js`). UI is not unit-tested in this project (manual device checks instead).
 
 ## Required coverage
 - **solitaire**: `canAutoFinish` (false with a face-down card or any stock/waste card, true otherwise) and `autoFinish` (always ends with 52 cards on the foundations, moves replay to a win, null when unavailable); solver (solvable, unsolvable and unknown positions; every returned solution replays to a win); every seed in `src/data/winnableSeeds.ts` is solvable and the list version matches `DEAL_ALGORITHM_VERSION`; `pickSeed` (unplayed seed, cycle when all played, random fallback for an empty or stale list); deck has 52 unique cards; seeded shuffle is deterministic and different seeds differ; deal layout (1..7 tableau, 24 stock); valid-move rules (alternating colours descending for tableau, same suit ascending for foundations, only Kings to empty columns, face-up sequences); auto-move "best spot" selection; apply move incl. auto-flip of the exposed card; stock draw 1 and recycle of waste; undo restores exact prior state (including after flips and recycles); hint returns a valid move or null; win detection; no-moves detection. Prefer table-driven tests and one full seeded game that is known to be winnable.
