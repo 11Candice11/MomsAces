@@ -57,5 +57,5 @@ Every reward number lives in `src/domain/rewards/economy.ts`.
 ## Scope
 - Android only for now. Local-only. English only.
 - New Solitaire games come from a list of verified winnable deals. When only moves to the foundations remain, a "Finish for me" button completes the game and counts as a win.
-- Visual references (Stitch mockups of Home, Move, Path, task-complete and Royal Flush) are in `docs/design/`. They show layout and style only; the spec wins on wording and behaviour.
+- Visual references (Stitch mockups of Home, Move, Path, task-complete and Royal Flush) are in `.kiro/docs/designs/`. They show layout and style only; the spec wins on wording and behaviour.
 - One user. No accounts, no PIN.

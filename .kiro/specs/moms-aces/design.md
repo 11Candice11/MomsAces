@@ -40,7 +40,7 @@ src/
   assets/       lottie/ icons/ cardbacks/ mascot/ fonts/
   data/         exercises.ts collection.ts prizes.ts medals.ts winnableSeeds.ts (generated)
 scripts/        generateWinnableSeeds.ts (dev tool, run with tsx; not bundled in the app)
-docs/design/    Stitch screenshots (Home, Move, Path, task-complete, Royal Flush): visual references only
+.kiro/docs/designs/    Stitch screenshots (Home, Move, Path, task-complete, Royal Flush): visual references only
 ```
 
 Path alias `@/` maps to `src/` in `tsconfig.json`, Babel (module-resolver) and Jest `moduleNameMapper`.
@@ -375,7 +375,7 @@ CelebrationHost         (overlay mounted at root; Royal Flush and Mystery Reveal
 - The Android back button is supported, and screens that can be left show a labelled "Back" button.
 
 ## 12. Home layout (R1, R14)
-Matches the Home mockup (`docs/design/home.png`) except for the differences in section 25. Top to bottom:
+Matches the Home mockup (`.kiro/docs/designs/home.png`) except for the differences in section 25. Top to bottom:
 1. Top bar: "Home" title (left), "Settings" and "Help" buttons (right).
 2. Rewards strip directly under the top bar: `TicketCounter`, `StarCounter` and `RankBadge` (tapping the badge opens the Path). It is on its own row so 72dp targets fit at the largest text size.
 3. Mascot Ace with a speech bubble.
@@ -529,7 +529,7 @@ No INTERNET permission in the release manifest (blocked in release only, since d
 
 ## 25. Mockup reconciliation (visual references)
 
-Six mockups are in `.kiro/specs/moms-aces/designs/` (`home`, `move_hub`, `path`, `play`, `royal_flush`, `task_completed`). Task 1.11 copies them to `docs/design/`. More screens (Play lobby, Solitaire, Win, Stand With Help, exercises) will be added later. They set the look: dark velvet, gold buttons, Ace in a speech bubble, rewards strip, bottom tabs. The decisions, after the owner's review:
+Eight mockups are in `.kiro/docs/designs/` (`home`, `move_hub`, `path`, `play`, `royal_flush`, `solitair`, `task_completed`, `win`). Task 1.11 references them in place; nothing is copied. More screens (Play lobby, Solitaire, Win, Stand With Help, exercises) will be added later. They set the look: dark velvet, gold buttons, Ace in a speech bubble, rewards strip, bottom tabs. The decisions, after the owner's review:
 
 | Mockup | What it shows | Decision |
 | --- | --- | --- |

@@ -23,7 +23,7 @@ inclusion: always
 - A Path chest says "Chest ready to open" only when a mystery card is really waiting.
 
 ## Large text layouts
-- At Large and Extra large text sizes, card titles get the full row width. Chips and reward rows stack below the title, never beside it (see the large-text Move mockup in `docs/design/`). Use the shared `CardRow` and `RewardRow` components.
+- At Large and Extra large text sizes, card titles get the full row width. Chips and reward rows stack below the title, never beside it (see the large-text Move mockup in `.kiro/docs/designs/`). Use the shared `CardRow` and `RewardRow` components.
 
 ## Celebration screens (Royal Flush, task complete)
 - Decorations (stars, sparkles, confetti) must never overlap the title or subtitle text.

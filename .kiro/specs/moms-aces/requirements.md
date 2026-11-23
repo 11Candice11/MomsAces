@@ -311,7 +311,7 @@ iOS builds, backup export/import, additional mini-games (shown locked only), clo
 - Dark theme on every screen (R12.7). Playfair Display and Nunito only. Adaptive icon: burgundy background, gold "A" card.
 - Mascot: the supplied Ace art is the base, one pose for now; other poses come later. The notification icon is a single-colour crown-card silhouette (Android restriction).
 - `settings.displayName`, default "Mom" (R10.5, R14.8).
-- Visual references (Stitch screenshots of Home, Move, Path, task-complete and Royal Flush) live in `docs/design/`. They show layout and style only. Where a mockup's wording or behaviour differs from this spec, the spec wins.
+- Visual references (Stitch screenshots of Home, Move, Path, task-complete and Royal Flush) live in `.kiro/docs/designs/`. They show layout and style only. Where a mockup's wording or behaviour differs from this spec, the spec wins.
 - Application id `com.candice.momspace`. `android:allowBackup="false"`. ts-jest. `react-native-svg`.
 - Pinned versions: Expo SDK 56.0.24 with react-native-mmkv 4.3.2 and react-native-nitro-modules 0.35.9 (full list in `.kiro/steering/tech.md`). If MMKV v4 or Nitro causes a problem, stop and report, and propose AsyncStorage behind the same storage adapter instead of working around it.
 - Updates: offline builds installed over the existing app. No OTA updates. Every build uses the same application id and signing key so her data is kept.
