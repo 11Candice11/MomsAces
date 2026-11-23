@@ -9,13 +9,14 @@
  */
 import { isDateKey, mondayOf } from '@/domain/shared/dates';
 import { normalizeDisplayName } from '@/domain/shared/displayName';
+import type { ProgressState } from '@/domain/progression/state';
 import {
   PLAYER_RANKS,
   type DayRecord,
   type NewRank,
-  type PlayerRank,
   type WeekState,
 } from '@/domain/progression/types';
+import type { RewardsState } from '@/domain/rewards/state';
 import {
   DEFAULT_CARD_BACK_ID,
   DEFAULT_TABLE_ID,
@@ -52,34 +53,8 @@ export interface SettingsData {
   permissionsExplained: boolean;
 }
 
-export interface ProgressData {
-  /** Archived days, pruned to the last 90. */
-  days: Record<string, DayRecord>;
-  today: TodayHand;
-  rank: PlayerRank;
-  rankLevel: number;
-  /** Path steps. Never decreases. */
-  pathPosition: number;
-  dailyRoyalFlushClaimedOn: string | null;
-  /** Date the Royal Flush celebration was shown; older or null means still to show. */
-  royalFlushSeenOn: string | null;
-  daysThisWeek: WeekState;
-  medals: string[];
-  claimedMilestones: number[];
-  claimedRankUps: NewRank[];
-}
-
-export interface RewardsData {
-  aceTickets: number;
-  goldStars: number;
-  unlockedItems: string[];
-  equippedCardBack: string;
-  equippedTable: string;
-  gamesWon: number;
-  pendingMysteryRewards: PendingMystery[];
-  lastRevealedPrize: Prize | null;
-  newlyUnlockedItemIds: string[];
-}
+export type ProgressData = ProgressState;
+export type RewardsData = RewardsState;
 
 export interface SolitaireSave {
   seed: number;

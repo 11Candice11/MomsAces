@@ -27,7 +27,8 @@ src/
     rewards/     economy.ts tickets.ts stars.ts unlocks.ts prizes.ts medals.ts
     progression/ rank.ts path.ts royalFlush.ts week.ts
     reminders/   schedule.ts snooze.ts time.ts
-    tasks/       definitions.ts completion.ts hand.ts standCountdown.ts
+    tasks/       definitions.ts completion.ts hand.ts standCountdown.ts rollover.ts
+    play/        session.ts (steps that change progress and rewards together: play a card, Royal Flush, path moves, wins)
   store/        settingsStore.ts progressStore.ts rewardsStore.ts solitaireStore.ts celebrationStore.ts(not persisted)
   services/     storage.ts notifications.ts calling.ts permissions.ts batteryOptimisation.ts backup.ts
   navigation/   RootNavigator.tsx TabNavigator.tsx types.ts
@@ -265,11 +266,11 @@ All functions are pure; the date and numbers are arguments.
 - `rankFromPosition(position) -> { rank, level, progressInLevel }`. Rank order jack, queen, king, ace. Ace level keeps increasing beyond the configured top level.
 - `didRankUp(before, after) -> { rankUp: boolean, levelUp: boolean, newRank }` drives the rank-up celebration.
 - `milestonesCrossed(before, after, alreadyClaimed) -> number[]` returns new milestone steps, each creating one `PendingMystery`.
-- `newRanksReached(before, after, alreadyClaimed) -> PlayerRank[]` returns each of queen, king and ace newly reached (not each level) and not yet in `claimedRankUps`. Steps 100, 200 and 300 are also milestone chests, so reaching each of them creates two pending mystery cards: one from `milestonesCrossed` (source `chest`) and one from `newRanksReached` (source `rankUp`). Each new rank creates `ECONOMY.newRank.mysteryCards` `PendingMystery` (source `rankUp`, `milestoneStep` = the rank's step). At steps 100, 200 and 300 the player therefore gets the milestone chest card AND the new-rank card.
+- `newRanksReached(before, after, alreadyClaimed) -> PlayerRank[]` returns each of queen, king and ace newly reached (not each level) and not yet in `claimedRankUps`. Steps 100, 200 and 300 are also milestone chests, so reaching each of them creates two pending mystery cards: one from `milestonesCrossed` (source `milestone`) and one from `newRanksReached` (source `rankUp`). Each new rank creates `ECONOMY.newRank.mysteryCards` `PendingMystery` (source `rankUp`, `milestoneStep` = the rank's step). At steps 100, 200 and 300 the player therefore gets the milestone chest card AND the new-rank card.
 - `isRoyalFlushEligible({ playedToday: TaskId[], claimedOn, today }) -> boolean`: all 4 tasks played today and `claimedOn !== today`.
 - `domain/progression/week.ts`: `litDays(days, weekId)` from days with at least one completed task this week; `daysThisWeek(state) -> number` (the "N" in "N days this week"); `rollWeek(state, today)` resets silently when a new week starts. `weekId` uses Monday-start weeks. Functions never return negative values. The interface never uses the word "streak".
 - **Path nodes.** `pathNodes(position, aheadSteps) -> PathNode[]` builds the whole board, not only the rank cards:
-  - `PathNode = { step, kind: 'start' | 'rank' | 'level' | 'chest', rank, level, reached: boolean, chestReady: boolean }`. `pathNodes` also takes the list of pending mystery cards. `chestReady` is true only when a `PendingMystery` with `source = 'milestone'` and `milestoneStep === step` exists. Nothing else makes a chest "ready".
+  - `PathNode = { step, kind: 'start' | 'rank' | 'level' | 'chest', rank, level, reached: boolean, chestReady: boolean }`. `pathNodes` also takes the list of pending mystery cards. `chestReady` is true only when a `PendingMystery` with `source = 'milestone'` or `'rankUp'` and `milestoneStep === step` exists (R15.11). Nothing else makes a chest "ready".
   - A node exists at every multiple of `milestoneEvery` (10 steps). Every one of them holds a chest.
   - A multiple of `stepsPerLevel` (20) is also a `level` node (levels 2 to 5 within a rank, labelled for example "Queen 3"). A multiple of `stepsPerLevel * levelsPerRank` (100) is a `rank` node (the Queen, King and Ace cards). Step 0 is `start` (Jack, level 1).
   - So each rank section shows its rank card, 4 more level nodes and chest nodes between them (10 nodes of 10 steps). Steps are computed for the top rank by extending past 400 (Ace levels continue).
