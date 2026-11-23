@@ -553,3 +553,9 @@ Eight mockups are in `.kiro/docs/designs/` (`home`, `move_hub`, `path`, `play`, 
 | Royal Flush | Star overlaps the title; fanned cards cover each other's indices; no bonus chips | R18.7 applies. Bonus chips (+2 tickets, +20 stars) added above the chest. |
 | Task completed | Bottom-right index upside down (reads like "V") | Both indices upright. |
 | Large text | No large-text mockup | R12.9 and the accessibility audit apply. |
+| Solitaire | Layout: Back, Help, 7 columns, stock count, dashed foundation slots, Undo / Hint / New Game bar | Matches section 17 (UI layer). |
+| Solitaire | "Finish For Me" shown while the stock still has cards and some tableau cards are face-down | Spec wins: the button appears only when `canAutoFinish` is true (R7.18). |
+| Solitaire | "140 STARS" counter in the top bar; "Auto-play all remaining cards" subtitle; all-caps button labels | **Open: ask the owner before task 12.** Not in the spec. Labels follow `strings` (sentence case). |
+| Win | "You won!", Ace's line, "+15 Stars" earned, a medal earned ("First Win") | Matches R7.12, R8 and task 12.13; the 15 stars come from `ECONOMY`. |
+| Win | "Victory Hand" badge, gold "Champion" card, "155 Total Stars" chip, "See My Collection" (primary) and "Back to Play" (secondary) | **Open: ask the owner before task 12.** Not in the spec. |
+| Win | Broken image text ("Ace the friendly mascot card celebrating enthusiastically") | Mockup error: the `Mascot` component is used. |
