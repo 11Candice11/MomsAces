@@ -1,6 +1,6 @@
-# Tasks: Mom's Aces
+# Implementation Plan: Mom's Aces
 
-Status: APPROVED (v6). No open questions. The owner has told us to proceed. Tasks 1.1 to 1.9 are done; the 1.9 gate passed on the owner's phone. Work continues with 1.10, 1.11 and tasks 2 to 5.
+Status: APPROVED (v6). No open questions. Tasks 1–5 (minus manual checks 4.7 and 5.6) are done. Work continues with task 6 (Reminders).
 
 Every task must finish with `npm run typecheck`, `npm run lint` and `npm test` passing, and must follow `.kiro/steering/`. "Req" lists the requirements in `requirements.md` that the task satisfies. UI tasks end with the accessibility checklist and a Calm mode check.
 
@@ -29,7 +29,7 @@ Order: do 1.1, then **1.9 as a gate** (versions pinned, `npx expo-doctor` passes
 - [x] 3.1 `domain/tasks` (also a test that a played card is never `next` and never due for display): definitions, `DEFAULT_REMINDER_TIMES`, `handState` (due times, `isDue`, `next` as in design section 6), `resolveDone` (played, openFlow, guide, repeat messages, and `extraWater` only for a Water notification up to the daily cap), `homeFocus` rules, `standCountdown.ts` (`STAND_COUNTDOWN` 15/60/30 and `clampStandCountdown`), `completeTask` (idempotent), `snoozeTask`, rollover. Tests: next card with none due, all due, snoozed, all played; Stretch and Stand never complete from `resolveDone`; extra water stops at the cap and is never given for a Home tap; no repeat ever awards tickets, path steps or Royal Flush credit; every repeat returns a message; `clampStandCountdown` below, inside and above the range. Req: R1.7, R1.8, R1.12, R1.15, R1.16, R3.1, R3.3, R3.6, R3.7, R4.5, R10.7, G10
 - [x] 3.2 `domain/reminders`: `buildSchedule`, `validateReminderTimes`, snooze time, and a pure `formatTime(time, clock)` in `domain/shared/formatTime.ts` where `clock` is `'12h'` or `'24h'` ("9:00 AM" or "09:00"). Tests (default times, sorting, `firstOfDay`, invalid format, duplicates, two reminders at the same minute, more than 3 per task; `formatTime` for midnight, noon, single-digit hours and minutes in both clocks). Req: R2.1, R2.2, R2.13, R2.15, R2.17, R2.22
 - [x] 3.3 `domain/rewards/economy.ts`: all reward numbers, costs and prices (design section 8) and an invariants test. Req: R3.8, R8.1, R9.12
-- [x] 3.3b `domain/rewards`: ticket award/spend, star award, unlock/equip rules, "New!" tracking (`markSeen`), amounts taken from `ECONOMY`. Tests. Req: R3, R8.1, R9.3, R9.5, R9.7, R9.11
+  - [continuation of 3.3] `domain/rewards`: ticket award/spend, star award, unlock/equip rules, "New!" tracking (`markSeen`), amounts taken from `ECONOMY`. Tests. Req: R3, R8.1, R9.3, R9.5, R9.7, R9.11
 - [x] 3.4 `domain/rewards/prizes.ts`: `pickPrize` (weighted, seedable, owned-item filtering, fallback), `createPendingMystery`, `revealMystery`. Shared seeded RNG in `domain/shared/rng.ts`. Tests: determinism per seed, weights over many seeds, owned items never chosen, fallback when nothing left, no reroll after reload, exactly one prize per reveal and the pending card removed. Amounts and weights come from `ECONOMY`. Req: R17
 - [x] 3.5 `domain/progression`: `advance`, `rankFromPosition`, `didRankUp`, `milestonesCrossed`, `isRoyalFlushEligible`, `newRanksReached` (Queen, King, Ace only, once each, not each level), `pathNodes` (rank, level and chest nodes), and "days this week" (`litDays`, `daysThisWeek`, `rollWeek`). Tests: never decreases, rank boundaries, milestone claimed once, once-per-day Royal Flush, node kinds at steps 0, 10, 20, 100, a new-rank card at steps 100, 200 and 300 only and never at level steps, two mystery cards (chest + new-rank card) at each of steps 100, 200 and 300, week rollover is silent and non-negative. Req: R15, R16.1, R16.3, R16.5
 - [x] 3.6 `domain/rewards/medals.ts` and `data/medals.ts`. Tests. Req: R9.10
@@ -46,12 +46,12 @@ Order: do 1.1, then **1.9 as a gate** (versions pinned, `npx expo-doctor` passes
 - [ ] 4.7 Manual check (partly done on the emulator in task 4: task complete in full, calm and none, rank-up, Royal Flush placeholder and Ace message render with titles clear of confetti and corner indices unclipped; still to do on her phone, at the largest text size and with system "remove animations" on): no flashing, readable static end states, Calm mode and system "remove animations" honoured. On the task-complete screen, decorations never overlap the title or subtitle and the card corner indices are never clipped (also at the largest text size). Req: R19.2, R19.3, R18.5, R18.7
 
 ## 5. Home: Today's Hand
-- [ ] 5.1 `FeaturedCard` (task icon, name, due-time chip, gold "Due now" or "Due at <time>", reward chips from `ECONOMY`, gold border, glow only in `full`), `MiniCard` and `HandRow` (icon, label, gold tick when played, clock and due time when pending, NEXT highlighted, no padlock, each a labelled button), all fed from one `handState`. Every time is shown with `formatTime` and the device clock setting from `services/clock.ts` (`useDeviceClock()`, reading `uses24hourClock` from `expo-localization`; install it with `npx expo install` and pin it exactly). Req: R1.1-R1.4, R1.12, R1.13, R1.15, R1.17, R2.22
-- [ ] 5.2 Rewards strip: `TicketCounter`, `StarCounter`, `RankBadge` (opens Path). Register counter positions in `RewardTargets`. Req: R9.9 (strip), R15.2, R15.3
-- [ ] 5.3 Progress strip "X of 4 cards played" leading to a closed chest showing only a "?". Req: R1.9, R16.2
-- [ ] 5.4 Home screen: Ace with speech bubble (sleeping before her first reminder while the next card still shows its clock; waving with "all caught up" when all 4 are played, with the golden "All played today" card and a single "Go to Play" button), `homeFocus` card from a notification, "Play card" (primary) and "Later" (secondary), all-caught-up and sleeping states, new-day deal, quiet rollover. Req: R1.5-R1.8, R1.10, R1.11, R1.14, R1.15, R1.18, R14.6
-- [ ] 5.4b Card taps: featured card = "Play card"; another pending small card asks "Play the <name> card now?" once; a played card gives an Ace message and no stars. Req: R1.13, R1.16
-- [ ] 5.5 Hook "Play card" to `playCard`: Water and Bathroom complete with the task-complete celebration; Stretch opens the Exercise Session; Stand opens Stand With Help. Show `AceMessage` for repeat Done and `extraWater`. Trigger rank-up and Royal Flush queueing from store results. Req: R1.7, R3, R3.7, R15.5, R16.1, G10
+- [x] 5.1 `FeaturedCard` (task icon, name, due-time chip, gold "Due now" or "Due at <time>", reward chips from `ECONOMY`, gold border, glow only in `full`), `MiniCard` and `HandRow` (icon, label, gold tick when played, clock and due time when pending, NEXT highlighted, no padlock, each a labelled button), all fed from one `handState`. Every time is shown with `formatTime` and the device clock setting from `services/clock.ts` (`useDeviceClock()`, reading `uses24hourClock` from `expo-localization`; install it with `npx expo install` and pin it exactly). Req: R1.1-R1.4, R1.12, R1.13, R1.15, R1.17, R2.22
+- [x] 5.2 Rewards strip: `TicketCounter`, `StarCounter`, `RankBadge` (opens Path). Register counter positions in `RewardTargets`. Req: R9.9 (strip), R15.2, R15.3
+- [x] 5.3 Progress strip "X of 4 cards played" leading to a closed chest showing only a "?". Req: R1.9, R16.2
+- [x] 5.4 Home screen: Ace with speech bubble (sleeping before her first reminder while the next card still shows its clock; waving with "all caught up" when all 4 are played, with the golden "All played today" card and a single "Go to Play" button), `homeFocus` card from a notification, "Play card" (primary) and "Later" (secondary), all-caught-up and sleeping states, new-day deal, quiet rollover. Req: R1.5-R1.8, R1.10, R1.11, R1.14, R1.15, R1.18, R14.6
+  - [continuation of 5.4] Card taps: featured card = "Play card"; another pending small card asks "Play the <name> card now?" once; a played card gives an Ace message and no stars. Req: R1.13, R1.16
+- [x] 5.5 Hook "Play card" to `playCard`: Water and Bathroom complete with the task-complete celebration; Stretch opens the Exercise Session; Stand opens Stand With Help. Show `AceMessage` for repeat Done and `extraWater`. Trigger rank-up and Royal Flush queueing from store results. Req: R1.7, R3, R3.7, R15.5, R16.1, G10
 - [ ] 5.6 Manual check against the accessibility checklist, at xlarge text and in Calm mode. Req: R12.1
 
 ## 6. Reminders
@@ -62,18 +62,18 @@ Order: do 1.1, then **1.9 as a gate** (versions pinned, `npx expo-doctor` passes
 - [ ] 6.5 Sync on launch and on every relevant settings change, including `displayName`. Req: R2.4, R2.5, R2.21
 - [ ] 6.6 Check on a device which timestamps expo-notifications gives on a response, and adjust the ordering rule in design section 13 if needed. Req: R2.19
 - [ ] 6.7 **Acceptance, on a real Samsung phone** (not an emulator). Req: R2.6-R2.8, R2.18-R2.20
-  - [ ] Reminders arrive at their scheduled times with the app open, with the app in the background, after the app is swiped away from recent apps, and after the phone is restarted.
-  - [ ] Done (Water, Bathroom), Start (Stretch, Stand) and Later each open the app to Home in all four cases above, and the right result shows (celebration, Ace message, or Ace's invitation with that card next).
-  - [ ] Tapping the notification body opens Home.
-  - [ ] Two notifications actioned one after the other are each processed exactly once, in time order.
-  - [ ] Exact-alarm behaviour is noted, and the exact Samsung menu names and steps ("Put unused apps to sleep", "Sleeping apps", "Deep sleeping apps", "Never sleeping apps") are written down with screenshots for task 15.3.
-  - [ ] Result recorded in this file with the phone model and Android version. (Manual "Force stop" is excluded, R2.20.)
-- [ ] 6.7a **Set up release signing (instructions for the owner).** Follow `docs/release-signing.md`: the owner creates one release keystore with `keytool` in `~/Keys/momsaces/` (outside the repository), puts the four signing properties in `~/.gradle/gradle.properties` or environment variables, and backs up the keystore and passwords. Add the config plugin `plugins/withReleaseSigning.js` that writes the release `signingConfig` into `android/app/build.gradle` from those properties during prebuild, so nothing in `android/` is edited by hand and `prebuild --clean` keeps signing. The build fails with a clear message if a property is missing. Record the certificate SHA-256 fingerprint in `docs/release-signing.md`. Req: G7
+  - Reminders arrive at their scheduled times with the app open, with the app in the background, after the app is swiped away from recent apps, and after the phone is restarted.
+  - Done (Water, Bathroom), Start (Stretch, Stand) and Later each open the app to Home in all four cases above, and the right result shows (celebration, Ace message, or Ace's invitation with that card next).
+  - Tapping the notification body opens Home.
+  - Two notifications actioned one after the other are each processed exactly once, in time order.
+  - Exact-alarm behaviour is noted, and the exact Samsung menu names and steps ("Put unused apps to sleep", "Sleeping apps", "Deep sleeping apps", "Never sleeping apps") are written down with screenshots for task 15.3.
+  - Result recorded in this file with the phone model and Android version. (Manual "Force stop" is excluded, R2.20.)
+  - [continuation of 6.7] **Set up release signing (instructions for the owner).** Follow `docs/release-signing.md`: the owner creates one release keystore with `keytool` in `~/Keys/momsaces/` (outside the repository), puts the four signing properties in `~/.gradle/gradle.properties` or environment variables, and backs up the keystore and passwords. Add the config plugin `plugins/withReleaseSigning.js` that writes the release `signingConfig` into `android/app/build.gradle` from those properties during prebuild, so nothing in `android/` is edited by hand and `prebuild --clean` keeps signing. The build fails with a clear message if a property is missing. Record the certificate SHA-256 fingerprint in `docs/release-signing.md`. Req: G7
 - [ ] 6.8 **Checkpoint: signed release build on her phone.** After 6.5 and 6.7a: bump `android.versionCode` (and `version` if needed) in `app.json`; run `npx expo prebuild --clean --platform android`; run `./gradlew assembleRelease` in `android/`; run `apksigner verify --print-certs android/app/build/outputs/apk/release/app-release.apk` and check the SHA-256 matches the one recorded in `docs/release-signing.md`; install with `adb -s <serial> install -r android/app/build/outputs/apk/release/app-release.apk`. A debug build on her phone uses a different key, so the first release install needs the debug app uninstalled first, before she has any data. Then run the 6.7 reminder acceptance over several days while later tasks continue. Record the results here. Req: R2.20, G7
 
 ## 7. Settings
 - [ ] 7.1 Settings screen layout with large controls: the name Ace calls her, reminder times (one large time control per reminder), sound, text size, stand countdown length (a stepper in 5-second steps from 15 to 60, default 30, from `STAND_COUNTDOWN`). Reminder times are shown and picked in the device's 12-hour or 24-hour format (`formatTime`, `useDeviceClock()`); stored times stay `HH:mm`. Req: R10.1, R10.2, R10.4, R10.7, R2.22
-- [ ] 7.1b `displayName` field: trim, 20 characters, "Mom" if empty, reschedules notifications. Req: R10.5, R14.8, R2.21
+  - [continuation of 7.1] `displayName` field: trim, 20 characters, "Mom" if empty, reschedules notifications. Req: R10.5, R14.8, R2.21
 - [ ] 7.2 Calm mode / Reduce motion toggle (off by default) applied immediately app-wide, with a short explanation from Ace. Req: R10.2, R19.1, R19.2
 - [ ] 7.3 Helper phone number input with validation and save. Req: R10.3
 - [ ] 7.4 "How does this work?" entry and links to permissions and battery guidance. Req: R10.2, R11.4
@@ -113,12 +113,12 @@ Order: do 1.1, then **1.9 as a gate** (versions pinned, `npx expo-doctor` passes
 - [ ] 12.1 Engine: types, deck, seeded shuffle (using `domain/shared/rng.ts`), deal, `DEAL_ALGORITHM_VERSION`. Tests. Req: R7.1, R7.14
 - [ ] 12.2 Engine: legal moves, `applyMove` (auto-flip, draw, recycle), win detection. Tests. Req: R7.6, R7.12, R7.14
 - [ ] 12.3 Engine: `findBestMove`, `hint`, `hasMoves`. Tests. Req: R7.3, R7.9, R7.13
-- [ ] 12.3b Engine: `canAutoFinish` and `autoFinish` (all tableau cards face-up, stock and waste empty). Tests: not available when a card is face-down or stock/waste has cards, available otherwise, ends with 52 foundation cards for each suit arrangement, move list replays to a win, returns null when unavailable. Req: R7.18, R7.19
+  - [continuation of 12.3] Engine: `canAutoFinish` and `autoFinish` (all tableau cards face-up, stock and waste empty). Tests: not available when a card is face-down or stock/waste has cards, available otherwise, ends with 52 foundation cards for each suit arrangement, move list replays to a win, returns null when unavailable. Req: R7.18, R7.19
 - [ ] 12.4 Engine: undo history with cap. Tests (including after flips and recycles). Req: R7.8
 - [ ] 12.5 `solver.ts`: deterministic search with transposition table and node budget. Tests on small hand-built positions (solvable, unsolvable, unknown) and replay of every returned solution through `applyMove` to a win. Req: R7.16, R7.14
-- [ ] 12.5b `scripts/generateWinnableSeeds.ts` (+ `tsx`, `npm run seeds:generate`): produce `src/data/winnableSeeds.ts` with about 300 proven seeds and the deal version; commit the generated file. Req: R7.15, R7.16
-- [ ] 12.5c `seeds.ts` `pickSeed` (unplayed seed, cycle when all played, random fallback when the list is empty or its version is stale). Tests. Req: R7.15
-- [ ] 12.5d Unit test that every seed in `winnableSeeds.ts` is solvable and the version matches. Measure the run time; if it is too slow for routine runs, tighten the node budget or store solutions and replay them (design section 22). Req: R7.17
+  - [continuation of 12.5] `scripts/generateWinnableSeeds.ts` (+ `tsx`, `npm run seeds:generate`): produce `src/data/winnableSeeds.ts` with about 300 proven seeds and the deal version; commit the generated file. Req: R7.15, R7.16
+  - [continuation of 12.5] `seeds.ts` `pickSeed` (unplayed seed, cycle when all played, random fallback when the list is empty or its version is stale). Tests. Req: R7.15
+  - [continuation of 12.5] Unit test that every seed in `winnableSeeds.ts` is solvable and the version matches. Measure the run time; if it is too slow for routine runs, tighten the node budget or store solutions and replay them (design section 22). Req: R7.17
 - [ ] 12.6 `solitaireStore` save/resume with compact serialisation, `seedSource`, and `playedWinnableSeeds`; new games use `pickSeed`. Req: R7.11, R7.15
 - [ ] 12.7 UI: `CardView`, responsive layout, equipped card back and table. Req: R7.2, R9.6
 - [ ] 12.8 UI: tap-to-move, gentle no-move feedback, stock draw/recycle. Req: R7.3, R7.4, R7.6
@@ -149,6 +149,26 @@ Order: do 1.1, then **1.9 as a gate** (versions pinned, `npx expo-doctor` passes
 - [ ] 15.5 Verify no network access (release manifest has no INTERNET permission, no analytics packages) and no gambling/purchase mechanics. Check that all dependency versions still match the pinned list. Req: G1, R20
 - [ ] 15.6 Release build (APK/AAB) and on-device acceptance pass. Req: R13
 - [ ] 15.7 Document how updates are installed on her phone: an offline signed release build installed over the existing app with `adb install -r`, with no OTA updates (signing itself is set up in 6.7a and described in `docs/release-signing.md`). Write the procedure in `docs/` and test it once: install a build, make progress, install a newer build over it, confirm the data is still there. Req: G7
+
+## Task Dependency Graph
+
+```json
+{
+  "waves": [
+    { "id": 1, "tasks": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "1.10", "1.11"] },
+    { "id": 2, "tasks": ["2.1", "2.2", "2.3", "2.4", "2.5"] },
+    { "id": 3, "tasks": ["3.1", "3.2", "3.3", "3.4", "3.5", "3.6", "3.7", "3.8"] },
+    { "id": 4, "tasks": ["4.1", "4.2", "4.3", "4.4", "4.5", "4.6", "4.7"] },
+    { "id": 5, "tasks": ["5.1", "5.2", "5.3", "5.4", "5.5", "5.6"] },
+    { "id": 6, "tasks": ["6.1", "6.2", "6.3", "6.4", "6.5", "6.6", "6.7", "6.8"] },
+    { "id": 7, "tasks": ["7.1", "7.2", "7.3", "7.4", "7.5", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "9.1", "9.2", "9.3", "9.4", "9.5"] },
+    { "id": 8, "tasks": ["10.1", "10.2", "10.3", "10.4", "10.5", "11.1", "11.2", "11.3", "11.4", "11.5"] },
+    { "id": 9, "tasks": ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6", "12.7", "12.8", "12.9", "12.10", "12.11", "12.12", "12.13", "12.14"] },
+    { "id": 10, "tasks": ["13.1", "13.2", "13.3", "13.4", "13.5", "14.1", "14.2", "14.3"] },
+    { "id": 11, "tasks": ["15.1", "15.2", "15.3", "15.4", "15.5", "15.6", "15.7"] }
+  ]
+}
+```
 
 ## Out of scope (later)
 Backup export/import UI, iOS, more mini-games, additional languages, haptics.

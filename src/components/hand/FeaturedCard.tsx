@@ -108,6 +108,7 @@ export function FeaturedCard({ taskId, dueTimeText, isDue, onPress }: FeaturedCa
               )}
               <Text
                 style={[theme.text.bodyBold, { color: theme.colors.goldHighlight, flexShrink: 1 }]}
+                numberOfLines={1}
               >
                 {statusText}
               </Text>
@@ -233,9 +234,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  statusLeft: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
-  chips: { flexDirection: 'row', flexWrap: 'wrap' },
-  rewardRow: { flexDirection: 'row', flexWrap: 'wrap' },
+  statusLeft: { flexDirection: 'row', alignItems: 'center', flex: 1, minWidth: 0 },
   dot: { width: 14, height: 14, borderRadius: 7 },
   aceRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   aceIndex: { fontSize: 36 },
