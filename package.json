@@ -6,6 +6,8 @@
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
+    "android:release": "expo run:android --variant release",
+    "build:apk": "cd android && ./gradlew assembleRelease && cd .. && echo '\nAPK built at: android/app/build/outputs/apk/release/app-release.apk'",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "jest",

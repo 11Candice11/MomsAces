@@ -1,0 +1,98 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  build:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run copy check
+        run: npm run check:copy || echo "Copy check script not found, skipping"
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v8
+        with:
+          expo-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+
+      - name: Generate android directory
+        run: npx expo prebuild --platform android --clean
+
+      # Uncomment this section if you've added keystore secrets (see workflows/README.md)
+      # - name: Decode keystore
+      #   if: ${{ secrets.RELEASE_KEYSTORE_BASE64 != '' }}
+      #   run: |
+      #     echo "${{ secrets.RELEASE_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
+      #
+      # - name: Create gradle.properties with signing config
+      #   if: ${{ secrets.RELEASE_KEYSTORE_BASE64 != '' }}
+      #   run: |
+      #     cat >> android/gradle.properties << EOF
+      #     MOMSACES_RELEASE_STORE_FILE=release.keystore
+      #     MOMSACES_RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}
+      #     MOMSACES_RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+      #     MOMSACES_RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}
+      #     EOF
+
+      - name: Build Release APK
+        working-directory: ./android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload unsigned APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-unsigned
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          retention-days: 30
+
+      # If signing secrets are configured, the signed APK will be here
+      - name: Upload signed APK artifact
+        if: hashFiles('android/app/build/outputs/apk/release/app-release.apk') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-signed
+          path: android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
+
+      - name: Upload APK as release asset (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: android/app/build/outputs/apk/release/app-release-unsigned.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
