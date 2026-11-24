@@ -6,7 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
-    "platforms": ["android"],
+    "platforms": [
+      "android"
+    ],
     "android": {
       "package": "com.candice.momspace",
       "adaptiveIcon": {
@@ -43,7 +45,8 @@
           "backgroundColor": "#2A1238"
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-localization"
     ]
   }
 }

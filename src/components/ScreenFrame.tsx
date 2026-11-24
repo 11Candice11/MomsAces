@@ -70,14 +70,17 @@ export function ScreenFrame({
             {title}
           </Text>
         )}
-        {showSettings ? (
-          <IconButton
-            icon="cog-outline"
-            label={strings.common.settings}
-            onPress={() => navigation.navigate('Settings')}
-          />
-        ) : null}
-        {showHelp ? <HelpButton /> : null}
+        {/* Settings and Help stay together, at the right, even when the bar wraps. */}
+        <View style={[styles.topActions, { gap: theme.spacing.sm }]}>
+          {showSettings ? (
+            <IconButton
+              icon="cog-outline"
+              label={strings.common.settings}
+              onPress={() => navigation.navigate('Settings')}
+            />
+          ) : null}
+          {showHelp ? <HelpButton /> : null}
+        </View>
       </View>
 
       {showBack ? (
@@ -136,7 +139,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
   },
-  title: { flexGrow: 1, flexShrink: 1 },
+  title: { flexGrow: 1, flexShrink: 0 },
+  topActions: { flexDirection: 'row', marginLeft: 'auto' },
   content: { flex: 1 },
   actions: { flexDirection: 'row', alignItems: 'stretch' },
   secondary: { flex: 1 },

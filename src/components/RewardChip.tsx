@@ -60,7 +60,7 @@ export function RewardRow({
   tone?: 'dark' | 'light';
 }) {
   const theme = useTheme();
-  const stack = theme.textScale !== 'normal';
+  const stack = theme.textScale === 'xlarge';
   return (
     <View style={[stack ? styles.stack : styles.row, { gap: theme.spacing.sm }]}>
       {tickets ? <RewardChip kind="tickets" amount={tickets} tone={tone} /> : null}
@@ -71,6 +71,6 @@ export function RewardRow({
 
 const styles = StyleSheet.create({
   chip: { flexDirection: 'row', alignItems: 'center', borderWidth: 1 },
-  row: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
+  row: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'flex-start' },
   stack: { flexDirection: 'column', alignItems: 'center' },
 });

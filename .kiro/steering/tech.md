@@ -68,17 +68,20 @@ Installed in task 1.9 and checked with `npx expo install --check` and `npx expo-
 | react-native-screens | 4.26.2 |
 | react-native-safe-area-context | 5.7.0 |
 | lottie-react-native | 7.3.8 |
-| expo-notifications | 57.0.25 |
-| expo-dev-client | 57.0.21 |
+| expo-notifications | 57.0.26 |
+| expo-dev-client | 57.0.22 |
 | expo-font | 57.0.4 |
-| expo-splash-screen | 57.0.11 |
+| expo-splash-screen | 57.0.12 |
 | expo-status-bar | 57.0.1 |
 | expo-system-ui | 57.0.4 |
 | @react-navigation/native | 7.5.2 |
 | @react-navigation/native-stack | 7.21.1 |
 | @react-navigation/bottom-tabs | 7.22.0 |
 | eslint-config-expo | 57.0.2 |
-Zustand and `expo-localization` are not installed yet. Add them with exact versions in tasks 2 and 5.1, and record them here.
+| expo-localization | 57.0.2 |
+| zustand | 5.1.0 |
+| globals (dev) | 14.0.0 |
+Zustand was added in task 2 and `expo-localization` in task 5.1. Expo patch updates within SDK 57 (expo-dev-client, expo-notifications, expo-splash-screen) were applied in task 5.1 because `expo-doctor` required them.
 Rules:
 - Install Expo-managed packages with `npx expo install` so they match the SDK. Install `react-native-mmkv@4.3.2` and `react-native-nitro-modules@0.35.9` with exact versions (the Nitro runtime must match the version MMKV's generated code was built with).
 - `.npmrc` has `save-exact=true`. In `package.json` use exact versions (no `^` or `~`). Commit `package-lock.json`.

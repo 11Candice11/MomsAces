@@ -28,7 +28,7 @@ export function IconButton({ icon, label, onPress }: IconButtonProps) {
           backgroundColor: theme.colors.velvetRaised,
           borderColor: theme.colors.gold,
           borderRadius: theme.radii.pill,
-          paddingHorizontal: theme.spacing.md,
+          paddingHorizontal: theme.spacing.sm + 4,
           opacity: pressed ? 0.85 : 1,
         },
       ]}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: 6,
     borderWidth: 1,
   },
 });

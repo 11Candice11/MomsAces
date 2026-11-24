@@ -59,6 +59,7 @@ export const en = {
     stand: { name: 'Stand With Help', short: 'Stand' },
     played: 'Played',
     dueNow: 'Due now',
+    dueNowLabel: (task: string) => `${task} card, due now`,
     dueAt: (time: string) => `Due at ${time}`,
     cardLabel: (task: string, time: string) => `${task} card, due at ${time}`,
     playedCardLabel: (task: string) => `${task} card, played`,
@@ -74,6 +75,16 @@ export const en = {
     allPlayedTitle: 'All played today',
     goToPlay: 'Go to Play',
     mysteryWaiting: 'A mystery card is waiting for you.',
+    royalFlushChestLabel: 'Royal Flush chest, closed',
+    allPlayedBody: 'Every card is played. Time for a game!',
+    featuredLabel: (task: string, due: string) => `${task} card, ${due}. Tap to play it.`,
+    allPlayedLabel: 'All played today. A golden Ace card.',
+    ticketsCounterLabel: (n: number) =>
+      n === 1 ? 'You have 1 Ace Ticket' : `You have ${n} Ace Tickets`,
+    starsCounterLabel: (n: number) =>
+      n === 1 ? 'You have 1 Gold Star' : `You have ${n} Gold Stars`,
+    rankBadgeLabel: (rank: string) => `Your rank: ${rank}. Opens The Path.`,
+    laterHint: 'Reminds you again in 10 minutes.',
   },
 
   /** Ace's speech. Each context has a pool of lines; one is picked per day (task 4.2). */
